@@ -32,11 +32,10 @@ public class Ejercicio7 {
             n = numeros.length;
         }
 
-        // guarda los hilos que van a buscar en el array
         Buscador[] hilos = new Buscador[n];
 
-        // divide el array y arranca un hilo para cada parte
         for (int i = 0; i < n; i++) {
+
             // calcula el inicio y el final de la parte que revisa este hilo
             int inicio = i * numeros.length / n;
             int fin = (i + 1) * numeros.length / n;
@@ -44,7 +43,6 @@ public class Ejercicio7 {
             hilos[i].start();
         }
 
-        // espera a que terminen todos los hilos
         for (int i = 0; i < n; i++) {
             hilos[i].join();
         }
@@ -55,7 +53,6 @@ public class Ejercicio7 {
                 return true;
             }
         }
-        // si ningun hilo lo encontro devuelve false
         return false;
     }
 
@@ -66,7 +63,6 @@ public class Ejercicio7 {
         private final int fin;
         private boolean encontrado;
 
-        // guarda el array y el tramo que tiene que revisar este hilo
         public Buscador(int[] numeros, int numeroBuscado, int inicio, int fin) {
             this.numeros = numeros;
             this.numeroBuscado = numeroBuscado;
@@ -75,7 +71,6 @@ public class Ejercicio7 {
             encontrado = false;
         }
 
-        // busca el numero en el tramo asignado
         @Override
         public void run() {
             for (int i = inicio; i < fin; i++) {
@@ -84,8 +79,6 @@ public class Ejercicio7 {
                 }
             }
         }
-
-        // indica si este hilo encontro el numero
         public boolean isEncontrado() {
             return encontrado;
         }

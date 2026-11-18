@@ -2,7 +2,6 @@ package com.antonipeiro.tema02;
 
 public class Ejercicio8 {
 
-    // crea un array de ejemplo y muestra cuantos primos hay
     public static void main(String[] args) throws InterruptedException {
         int[] numeros = {2, 3, 4, 5, 9, 11, 17, 20, 23, 29, 1};
         int cantidad = contarPrimos(numeros);
@@ -21,34 +20,29 @@ public class Ejercicio8 {
             return 0;
         }
 
-        // coge el numero de procesadores disponibles
-        int numeroHilos = Runtime.getRuntime().availableProcessors();
-        // no crea mas hilos que elementos tiene el array
-        if (numeroHilos > numeros.length) {
-            numeroHilos = numeros.length;
+        int n = Runtime.getRuntime().availableProcessors();
+        if (n > numeros.length) {
+            n = numeros.length;
         }
 
-        // guarda los hilos que van a contar los numeros primos
-        ContadorPrimos[] hilos = new ContadorPrimos[numeroHilos];
+        ContadorPrimos[] hilos = new ContadorPrimos[n];
 
-        // divide el array y arranca un hilo para cada parte
-        for (int i = 0; i < numeroHilos; i++) {
+        for (int i = 0; i < n; i++) {
             // calcula el inicio y el final de la parte que revisa este hilo
-            int inicio = i * numeros.length / numeroHilos;
-            int fin = (i + 1) * numeros.length / numeroHilos;
+            int inicio = i * numeros.length / n;
+            int fin = (i + 1) * numeros.length / n;
             hilos[i] = new ContadorPrimos(numeros, inicio, fin);
             hilos[i].start();
         }
 
         // suma los resultados de los hilos cuando hayan terminado
         int cantidadPrimos = 0;
-        for (int i = 0; i < numeroHilos; i++) {
-            // espera a que termine este hilo
+
+        for (int i = 0; i < n; i++) {
             hilos[i].join();
             cantidadPrimos += hilos[i].getCantidadPrimos();
         }
 
-        // devuelve la cantidad total de primos
         return cantidadPrimos;
     }
 
@@ -58,7 +52,6 @@ public class Ejercicio8 {
         private final int fin;
         private int cantidadPrimos;
 
-        // guarda el array y el tramo que tiene que contar este hilo
         public ContadorPrimos(int[] numeros, int inicio, int fin) {
             this.numeros = numeros;
             this.inicio = inicio;
@@ -66,7 +59,6 @@ public class Ejercicio8 {
             cantidadPrimos = 0;
         }
 
-        // cuenta los primos del tramo asignado
         @Override
         public void run() {
             for (int i = inicio; i < fin; i++) {
@@ -76,7 +68,6 @@ public class Ejercicio8 {
             }
         }
 
-        // devuelve cuantos primos conto este hilo
         public int getCantidadPrimos() {
             return cantidadPrimos;
         }
